@@ -225,6 +225,11 @@ const Sidebar = ({ setSrch, srch }) => {
   const { users, getusers, setselecteduser, selectedUser, seenMessage, checkIsseen, getinstantData, removeMssg, seen } = useChatstore();
   const { onlineusers } = socketdata();
 
+  console.log('....................online..................',onlineusers)
+  console.log('....................users..................',users)
+  console.log('................selectedUser...........',selectedUser)
+
+
   const [showusers, setShowusers] = useState(false);
   const [showonline, setShowonline] = useState(false);
   const [isopen, setIsopen] = useState(true);

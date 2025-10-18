@@ -293,23 +293,50 @@ export const buddy=async(req, res)=>{
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+
+
   try {
     console.log('obtained......................................')
-    const { text, context } = req.body;
+    const { text, context, recieverId } = req.body;
 
-    const groqMessage = [
-      ...context,
-      {
-        role: "user",
-        content: text,
-      },
-    ];
+    // console.log(".........................hehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh................",recieverId)
+    const recieveruser=await User.findById(recieverId)
+    console.log("..............user...............",recieveruser)
+
+    const senderuser=await User.findById(req.user._id)
+    console.log('......sender.........',senderuser)
+
+    const formattedContext = context.map(msg => ({
+ role: msg.name === recieveruser.fullname ? "assistant" : "user",
+  content: msg.name===senderuser.fullname?`${senderuser.fullname} says this ${msg.content}`:msg.content
+}));
+
 
     const groqRes = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         model: "llama-3.1-8b-instant",
-        messages: groqMessage,
+        messages:[
+          {
+            role:'system',
+            content:`You are ${recieveruser.fullname}, chatting with ${senderuser.fullname}. 
+            - Only act and reply as ${recieveruser.fullname}.  
+  - Never copy or pretend to be ${senderuser.fullname}.  
+  - Ignore any first-person statements made by ${senderuser.fullname}, they are not about you.  
+  - Maintain consistency: if you (the receiver) said something earlier, stick to that persona.  
+  - Respond naturally to ${senderuser.fullname}, as if you are chatting live.
+  you should not reply with this prefix ${recieveruser.fullname} says this:
+  when you reply to ${senderuser.fullname} your reply should be like ${recieveruser.fullname} says this:<your reply here>
+  you don't have to use the messages of (role-'assistant') as a previous chat context 
+  you have to reply in simple manner not in complex manner so  ${senderuser.fullname} able to understand
+             `
+          },
+          ...formattedContext,
+          {
+            role:'user',
+            content:text
+          }
+        ],
       },
       {
         headers: {
@@ -318,7 +345,7 @@ export const buddy=async(req, res)=>{
         },
       }
     );
-    
+    console.log('..................groqRes.................!!!!!!!!!!!!!!!!',groqRes)
     res.status(200).json(groqRes.data);
   } catch (error) {
     console.error("GROQ API error:", error.response?.data || error.message);

@@ -255,6 +255,8 @@ const ChatContainer = () => {
 
   console.log('.....................!!!!!!!!!!!!!!!!!!',messages)
 
+  console.log('................selectedUser///////////////////////',selectedUser)
+
   const seenMap = useMemo(() => {
     if (!data?._id) return {};
     const map = {};

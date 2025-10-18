@@ -117,9 +117,10 @@ export const sendsrch=async(query)=>{
 // }
 
 
-export const buddy = async ({ text, context }) => {
+export const buddy = async ({ text, context, recieverId }) => {
   try {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/message/buddy`, { text, context },{withCredentials:true});
+    console.log('...............fn................running.................',recieverId)
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/message/buddy`, { text, context, recieverId },{withCredentials:true});
     console.log("GROQ Response >>>", res.data);
     return res.data;
   } catch (error) {

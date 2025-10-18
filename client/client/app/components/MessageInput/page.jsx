@@ -22,7 +22,7 @@ const MessageInput = ({isbuddyActive,setIsbuddyAcive,Showemojis,setShowEmojis,te
   // const [text, setText] = useState('');
   const [context,setContext]=useState([])
   // const [selectedId,setSelectedId]=useState(null)
-  const { sendMessage,getinstantData,type,selectedUser,messages,sendnotif } = useChatstore();
+  const { sendMessage,getinstantData,type,selectedUser,messages,sendnotif,users } = useChatstore();
 
     const { data:user } = useQuery({
       queryKey: ["me"],
@@ -89,10 +89,14 @@ const showemoji=()=>{
   }
 
   const connectedtobuddy=()=>{
-        const conTextmessages=messages.map((msg)=>({
-    role:'assistant',
-    content:msg.text
-  }))
+    console.log('................Messages.................!!!!!!!!!!!!',messages)
+        const conTextmessages=messages.map((msg)=>(
+          {
+            role:user?._id===msg.senderId?'user':'assistant',
+            content:msg.text,
+            name:user?._id===msg.senderId?`${user.fullname}`:`${selectedUser.fullname}`
+          }
+  ))
   setContext(conTextmessages)
   setBuddyLoading(true);
   setTimeout(() => {
@@ -137,7 +141,7 @@ const showemoji=()=>{
   const handleSubmitbuddy=(e)=>{
      e.preventDefault();
     if (!text.trim()) return;
-    mutationbuddy.mutate({text,context});
+    mutationbuddy.mutate({text,context,recieverId:selectedUser?._id});
     setText('')
   }
 

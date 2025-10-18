@@ -1,7 +1,3 @@
-
-
-
-
 "use client";
 import AccessAlarmRoundedIcon from '@mui/icons-material/AccessAlarmRounded';
 import { useRouter } from 'next/navigation';
@@ -129,7 +125,7 @@ const Navbar = () => {
   <Notification shownotif={shownotif} setShownotif={setShownotif}/>
 
   <div>
-    <button className='bg-pink-600 text-[white] font-semibold hidden md:block rounded-full py-2 px-4 cursor-pointer' onClick={showAllusers}>⏰ Schedule Message</button>
+    <button className='bg-pink-600 text-[black] hover:text-[white] font-semibold hidden md:block border-2 border-gray-300 hover:border-[black] shadow-xl py-1 px-4 cursor-pointer' onClick={showAllusers}>⏰ Schedule Message</button>
     {/* <button className='md:hidden text-gray-400 cursor-pointer' onClick={showAllusers}><AccessAlarmRoundedIcon className='text-pink-500' style={{ fontSize: '36px' }} /></button> */}
     <div>
     <Schedule showusers={showusers} setShowusers={setShowusers}/>
@@ -149,8 +145,8 @@ const Navbar = () => {
         </p>
       ) : (
         
-        <p onClick={() => router.push('/auth/profilepage')} className='text-white cursor-pointer font-bold bg-blue-800 p-2 rounded-2xl'>
-          {data?.fullname}
+        <p onClick={() => router.push('/auth/profilepage')} className=''>
+          <img className='h-10 w-10 rounded-full border-2 border-[blue] cursor-pointer transform hover:scale-110 transition duration-300' src={`${process.env.NEXT_PUBLIC_API_URL}/images/uploads/${data.profilepic}`}/>
         </p>
        
         
@@ -160,7 +156,7 @@ const Navbar = () => {
         <p>logging off...</p>
       ) : (
         <button
-          className='bg-red-600 hover:bg-red-500 text-white font-medium py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-md'
+          className='bg-red-600 hover:bg-red-500 text-white font-medium py-2 rounded-full px-4  transition-all duration-300 transform hover:scale-105 shadow-md'
           onClick={logoutusers}
         >
           Logout
