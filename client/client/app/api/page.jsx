@@ -35,7 +35,7 @@ export const getloggeduser=async()=>{
     // console.log("formdata",loginformdata)
     try {
         const res=await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`,{ withCredentials: true });
-        console.log(res.data)
+        console.log("res......................data................",res.data)
         return res.data
     } catch (error) {
         console.log('error is occur',error.message)
